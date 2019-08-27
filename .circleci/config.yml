@@ -34,11 +34,9 @@ jobs:
 
       - run:
           name: Run tests
-          environment:
-            BAIJI_POD_TEST_BUCKET: metabaiji-pod-test
           command: |
             . venv/bin/activate
-            rake unittest
+            rake tests
 
       - run:
           name: Check lint
@@ -79,11 +77,9 @@ jobs:
 
       - run:
           name: Run tests
-          environment:
-            BAIJI_POD_TEST_BUCKET: metabaiji-pod-test
           command: |
             . venv/bin/activate
-            rake unittest
+            rake test
 
       - run:
           name: Check lint
