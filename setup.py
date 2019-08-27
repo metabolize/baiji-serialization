@@ -1,3 +1,4 @@
+from __future__ import print_function
 # https://coderwall.com/p/qawuyq
 # Thanks James.
 
@@ -6,7 +7,7 @@ try:
     long_description = pypandoc.convert('README.md', 'rst')
 except (IOError, ImportError):
     long_description = ''
-    print 'warning: pandoc or pypandoc does not seem to be installed; using empty long_description'
+    print('warning: pandoc or pypandoc does not seem to be installed; using empty long_description')
 
 import os
 requirements_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'requirements.txt')
@@ -17,13 +18,13 @@ import importlib
 from setuptools import setup
 
 setup(
-    name='baiji-serialization',
+    name='metabaiji-serialization',
     version=importlib.import_module('baiji.serialization').__version__,
     author='Body Labs',
-    author_email='alex@bodylabs.com, paul.melnikow@bodylabs.com',
+    author_email='github@paulmelnikow.com',
     description='Read and write common file formats to Amazon S3 and local files',
     long_description=long_description,
-    url='https://github.com/bodylabs/baiji-serialization',
+    url='https://github.com/metabolize/baiji-serialization',
     license='Apache',
     packages=[
         'baiji',
