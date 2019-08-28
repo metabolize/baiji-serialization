@@ -93,7 +93,7 @@ workflows:
   on-commit:
     jobs:
       - python2
-      # - python3
+      - python3
 
   daily:
     triggers:
@@ -104,4 +104,4 @@ workflows:
               only: master
     jobs:
       - python2
-      # - python3
+      - python3

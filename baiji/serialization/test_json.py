@@ -31,7 +31,7 @@ class TestJson(unittest.TestCase):
             '{\n    "4": 5,\n    "6": 7\n}')
 
     def test_json_dump_stringio(self):
-        from StringIO import StringIO
+        from six import StringIO
         io = StringIO()
         json.dump(['streaming API'], io)
         self.assertEqual(io.getvalue(), r'["streaming API"]')
@@ -58,7 +58,7 @@ class TestJson(unittest.TestCase):
             u'"foo\x08ar')
 
     def test_json_load_stringio(self):
-        from StringIO import StringIO
+        from six import StringIO
         io = StringIO('["streaming API"]')
         self.assertEqual(json.load(io), [u'streaming API'])
 
@@ -95,10 +95,15 @@ class TestJson(unittest.TestCase):
         np.testing.assert_almost_equal(res_array, np.array([[859.0, 859.0], [217.0, 106.0], [302.0, 140.0]]))
 
     def test_json_dump_ndarray_tricks_compatible(self):
+        import six
         import numpy as np
+        if six.PY2:
+            expected = r'{"foo": {"dtype": "float32", "shape": [3, 2], "__ndarray__": [[859.0, 859.0], [217.0, 106.0], [302.0, 140.0]]}}'
+        else:
+            expected = r'{"foo": {"__ndarray__": [[859.0, 859.0], [217.0, 106.0], [302.0, 140.0]], "dtype": "float32", "shape": [3, 2]}}'
         self.assertEqual(
             json.dumps({"foo": np.array([[859.0, 859.0], [217.0, 106.0], [302.0, 140.0]], dtype=np.float32)}),
-            r'{"foo": {"dtype": "float32", "shape": [3, 2], "__ndarray__": [[859.0, 859.0], [217.0, 106.0], [302.0, 140.0]]}}')
+            expected)
 
     def test_json_dump_ndarray_tricks_compatible_primitive_option(self):
         import numpy as np
@@ -106,7 +111,7 @@ class TestJson(unittest.TestCase):
             json.dumps({"foo": np.array([[859.0, 859.0], [217.0, 106.0], [302.0, 140.0]], dtype=np.float32)}, primitive=True),
             r'{"foo": [[859.0, 859.0], [217.0, 106.0], [302.0, 140.0]]}')
 
-    def test_json_load_sprase_matrix(self):
+    def test_json_load_sparse_matrix(self):
         import numpy as np
         import scipy.sparse as sp
         res = json.loads(r'{"foo": {"format": "dia", "dtype": "float32", "shape": [3, 3], "__scipy.sparse.sparsematrix__": true, "data": {"dtype": "float64", "shape": [3], "__ndarray__": [1.0, 1.0, 1.0]}, "col": {"dtype": "int32", "shape": [3], "__ndarray__": [0, 1, 2]}, "row": {"dtype": "int32", "shape": [3], "__ndarray__": [0, 1, 2]}}}')
@@ -116,8 +121,11 @@ class TestJson(unittest.TestCase):
         self.assertEqual(res_array.dtype, np.float32)
         np.testing.assert_almost_equal(res_array.todense(), np.eye(3))
 
-    def test_json_dump_sprase_matrix(self):
+    def test_json_dump_sparse_matrix(self):
+        import six
         import scipy.sparse as sp
-        self.assertEqual(
-            json.dumps({"foo": sp.eye(3)}),
-            r'{"foo": {"format": "dia", "dtype": "float64", "shape": [3, 3], "__scipy.sparse.sparsematrix__": true, "data": {"dtype": "float64", "shape": [3], "__ndarray__": [1.0, 1.0, 1.0]}, "col": {"dtype": "int32", "shape": [3], "__ndarray__": [0, 1, 2]}, "row": {"dtype": "int32", "shape": [3], "__ndarray__": [0, 1, 2]}}}')
+        if six.PY2:
+            expected = r'{"foo": {"format": "dia", "dtype": "float64", "shape": [3, 3], "__scipy.sparse.sparsematrix__": true, "data": {"dtype": "float64", "shape": [3], "__ndarray__": [1.0, 1.0, 1.0]}, "col": {"dtype": "int32", "shape": [3], "__ndarray__": [0, 1, 2]}, "row": {"dtype": "int32", "shape": [3], "__ndarray__": [0, 1, 2]}}}'
+        else:
+            expected = r'{"foo": {"__scipy.sparse.sparsematrix__": true, "format": "dia", "dtype": "float64", "shape": [3, 3], "data": {"__ndarray__": [1.0, 1.0, 1.0], "dtype": "float64", "shape": [3]}, "row": {"__ndarray__": [0, 1, 2], "dtype": "int32", "shape": [3]}, "col": {"__ndarray__": [0, 1, 2], "dtype": "int32", "shape": [3]}}}'
+        self.assertEqual(json.dumps({"foo": sp.eye(3)}), expected)

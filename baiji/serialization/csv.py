@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+import six
 
 __all__ = ['load', 'dump', 'dumps', 'EXTENSION']
 
@@ -127,7 +128,7 @@ class CSVCollectionSerializer(CSVSerializer):
     @classmethod
     def compute_keys(cls, collection):
         if isinstance(collection, dict):
-            first_value = next(collection.itervalues())
+            first_value = next(six.itervalues(collection))
         else:
             first_value = collection[0]
         result = sorted(first_value.keys())
@@ -139,7 +140,7 @@ class CSVCollectionSerializer(CSVSerializer):
             keyed_collection = {index: value for index, value in enumerate(collection)}
 
         expected = set(result)
-        for key, item in keyed_collection.iteritems():
+        for key, item in six.iteritems(keyed_collection):
             if set(item.keys()) != expected:
                 message = 'Item %s had different keys (got %s, expected %s)' % \
                     (key, ' '.join(item.keys()), ' '.join(expected))
