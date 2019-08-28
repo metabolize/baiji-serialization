@@ -1,3 +1,3 @@
-baiji
+metabaiji
 simplejson>=3.8.2
 pyyaml>=3.11
