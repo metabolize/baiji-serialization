@@ -46,9 +46,9 @@ class MethodListCaller(object):
         Call the methods in method_list until one of them returns something other than None
         and return that as the result of the call.
         '''
-        from itertools import ifilter
+        import six
         try:
-            return next(ifilter(lambda x: x is not None, (f(x) for f in self.method_list)))
+            return next(six.moves.filter(lambda x: x is not None, (f(x) for f in self.method_list)))
         except StopIteration:
             return self.default(x)
 
