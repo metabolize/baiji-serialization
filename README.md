@@ -32,7 +32,7 @@ It's used by related forks such as [lace][].
 Features
 --------
 
-- Reads and writes Pickle, JSON, and YAML
+- Reads and writes Pickle, CSV, JSON, and YAML
 - Works without an S3 connection (with local files)
 - Supports Python 2.7 and uses boto2
 - Supports OS X, Linux, and Windows
@@ -69,7 +69,6 @@ from baiji.serialization import csv
 csv.dump(foo, filename)
 foo = csv.load(filename)
 ```
-
 
 Development
 -----------
