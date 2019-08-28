@@ -38,11 +38,11 @@ jobs:
             . venv/bin/activate
             rake test
 
-      - run:
-          name: Check lint
-          command: |
-            . venv/bin/activate
-            rake lint
+      # - run:
+      #     name: Check lint
+      #     command: |
+      #       . venv/bin/activate
+      #       rake lint
 
   python3:
     docker:
@@ -81,11 +81,11 @@ jobs:
             . venv/bin/activate
             rake test
 
-      - run:
-          name: Check lint
-          command: |
-            . venv/bin/activate
-            rake lint
+      # - run:
+      #     name: Check lint
+      #     command: |
+      #       . venv/bin/activate
+      #       rake lint
 
 workflows:
   version: 2
