@@ -1,4 +1,4 @@
-from cPickle import UnpicklingError # We import this to expose it to our importers pylint: disable=unused-import
+from six.moves.cPickle import UnpicklingError # We import this to expose it to our importers pylint: disable=unused-import
 
 EXTENSION = '.pkl'
 
@@ -11,15 +11,15 @@ def load(f, *args, **kwargs):
     return ensure_file_open_and_call(f, _load, 'rb', *args, **kwargs)
 
 def loads(s, *args, **kwargs):
-    import cPickle as pickle
+    from six.moves import cPickle as pickle
     return pickle.loads(s, *args, **kwargs)
 
 def dumps(obj):
-    import cPickle as pickle
+    from six.moves import cPickle as pickle
     return pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
 
 def _dump(f, obj):
-    import cPickle as pickle
+    from six.moves import cPickle as pickle
     return pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
 
 def _load(f, constructors=None):
@@ -32,7 +32,7 @@ def _load(f, constructors=None):
       albeit quite densely:
       https://docs.python.org/2/library/pickle.html#subclassing-unpicklers
     '''
-    import cPickle as pickle
+    from six.moves import cPickle as pickle
     from baiji.serialization.util.importlib import class_from_str
 
     def unpickler_find_global(module_name, class_name):
